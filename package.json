@@ -1,0 +1,33 @@
+{
+  "name": "farmacia-app",
+  "version": "1.0.0",
+  "description": "Sistema de inventario y ventas para farmacia con Node.js, Express, SQLite y Electron",
+  "main": "main.js",
+  "scripts": {
+    "electron": "electron .",        
+    "server": "node server.js",      
+    "dev": "nodemon server.js",     
+    "app": "concurrently \"npm run server\" \"npm run electron\"" 
+  },
+  "keywords": [
+    "electron",
+    "nodejs",
+    "express",
+    "sqlite",
+    "farmacia",
+    "inventario"
+  ],
+  "author": "TuNombre",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2",
+    "sqlite3": "^5.1.7",
+    "sweetalert": "^2.1.2"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "nodemon": "^3.1.10",
+    "concurrently": "^8.2.2"
+  }
+}
