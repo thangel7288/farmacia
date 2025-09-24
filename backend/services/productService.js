@@ -1,4 +1,3 @@
-// backend/services/productService.js
 const db = require("../config/db");
 
 const getAllProducts = () => {
@@ -17,11 +16,19 @@ const addProduct = (producto) => {
       `INSERT INTO productos (nombre, codigo_barras, precio, stock) VALUES (?, ?, ?, ?)`,
       [nombre, codigo_barras, precio, stock],
       function (err) {
-        if (err) reject(err);
-        else resolve({ id: this.lastID, ...producto });
+        if (err) {
+          console.error("⚠️ Error SQLite:", err); // 👈 veremos el error real en consola
+          if (err.message.includes("UNIQUE constraint failed")) {
+            return reject({
+              code: "DUPLICATE_CODE",
+              message: "El producto con este código de barras ya existe. Usa PUT para actualizarlo."
+            });
+          }
+          return reject(err);
+        }
+        resolve({ id: this.lastID, ...producto });
       }
     );
   });
 };
-
 module.exports = { getAllProducts, addProduct };

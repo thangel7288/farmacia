@@ -1,23 +1,27 @@
 const productService = require("../services/productService");
 
-exports.getProductos = (req, res) => {
-  productService.getAll((err, rows) => {
-    if (err) {
-      res.status(500).json({ error: "Error al obtener productos" });
-    } else {
-      res.json(rows);
-    }
-  });
+const getProducts = async (req, res) => {
+  try {
+    const productos = await productService.getAllProducts();
+    res.json(productos);
+  } catch (error) {
+    res.status(500).json({ error: error.message || "Error al obtener productos" });
+  }
 };
 
-exports.addProducto = (req, res) => {
-  const { nombre, codigo_barras, precio, stock } = req.body;
+const createProduct = async (req, res) => {
+  try {
+    const nuevo = await productService.addProduct(req.body);
+    res.status(201).json(nuevo);
+  } catch (error) {
+    console.error("Error en createProduct:", error); // 👈 para debug en consola
 
-  productService.create({ nombre, codigo_barras, precio, stock }, (err, result) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
+    if (error.code === "DUPLICATE_CODE") {
+      res.status(400).json({ error: error.message });
     } else {
-      res.json({ message: "Producto agregado", id: result.id });
+      res.status(500).json({ error: error.message || "Error al crear producto" });
     }
-  });
+  }
 };
+
+module.exports = { getProducts, createProduct };

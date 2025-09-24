@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 
 const productRouter = require("./routes/productRouter");
 const ventaRouter = require("./routes/ventaRouter");
+const saleRouter = require("./routes/saleRouter");
+
 
 const app = express();
 const PORT = 3000;
@@ -30,6 +32,8 @@ function authenticateToken(req, res, next) {
 // Rutas protegidas
 app.use("/api/productos", authenticateToken, productRouter);
 app.use("/api/ventas", authenticateToken, ventaRouter);
+app.use("/api/ventas", saleRouter);
+
 
 // Endpoint para obtener el token (solo para pruebas)
 app.get("/api/token", (req, res) => {
