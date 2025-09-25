@@ -2,11 +2,11 @@
   "name": "farmacia-app",
   "version": "1.0.0",
   "description": "Sistema de inventario y ventas para farmacia con Node.js, Express, SQLite y Electron",
-  "main": "main/main.js",
+  "main": "main.js",
   "scripts": {
+    "backend": "nodemon backend/server.js",
     "electron": "electron .",
-    "server": "nodemon backend/server.js",
-    "start": "concurrently \"npm run server\" \"npm run electron\""
+    "dev": "concurrently \"npm run backend\" \"npm run electron\""
   },
   "keywords": [
     "electron",
@@ -25,7 +25,8 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "sqlite3": "^5.1.7",
-    "sweetalert": "^2.1.2"
+    "sweetalert": "^2.1.2",
+    "sweetalert2": "^11.23.0"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

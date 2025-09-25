@@ -30,8 +30,8 @@ function authenticateToken(req, res, next) {
 }
 
 // Rutas protegidas
-app.use("/api/productos", authenticateToken, productRouter);
-app.use("/api/ventas", authenticateToken, ventaRouter);
+app.use("/api/productos", productRouter);
+app.use("/api/ventas", ventaRouter);
 app.use("/api/ventas", saleRouter);
 
 
@@ -41,5 +41,5 @@ app.get("/api/token", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en http://localhost:${3000}`);
 });
