@@ -1,92 +1,56 @@
-import { getProductos, addProducto, updateProducto, deleteProducto } from "./productos.js";
-import { showError, showConfirm } from "./utils/alerts.js";
+// frontend/js/productosUI.js
+import { updateProducto, deleteProducto, getProductos } from "./productos.js";
 
-// Render principal
-export function renderProductosUI() {
-  document.getElementById("app").innerHTML = `
-    <h1>Gestión de Productos</h1>
-
-    <form id="form-producto">
-      <input type="text" name="nombre" placeholder="Nombre" required />
-      <input type="number" name="precio" placeholder="Precio" required />
-      <input type="number" name="stock" placeholder="Stock" required />
-      <button type="submit">Agregar Producto</button>
-    </form>
-
-    <div id="productos-lista"></div>
-  `;
-
-  // Cargar productos
-  renderProductos();
-
-  // Listener del formulario
-  document.getElementById("form-producto").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const form = e.target;
-
-    const data = {
-      nombre: form.nombre.value,
-      precio: parseFloat(form.precio.value),
-      stock: parseInt(form.stock.value),
-    };
-
-    try {
-      await addProducto(data);
-      form.reset();
-      renderProductos();
-    } catch (err) {
-      showError("Error al agregar producto");
-    }
-  });
-}
-
-// Renderizar lista de productos
-async function renderProductos() {
-  const container = document.getElementById("productos-lista");
-  container.innerHTML = "";
-  const productos = await getProductos();
+export function renderProductosUI(productos = []) {
+  const lista = document.getElementById("productos-lista");
+  if (!lista) return;
 
   if (productos.length === 0) {
-    container.innerHTML = "<p>No hay productos registrados.</p>";
+    lista.innerHTML = "<p>No hay productos registrados</p>";
     return;
   }
 
-  productos.forEach((p) => {
-    const div = document.createElement("div");
-    div.classList.add("producto-item");
-    div.innerHTML = `
-      <strong>${p.nombre}</strong>  
-      <span>💰 $${p.precio}</span>  
-      <span>📦 Stock: ${p.stock}</span>
-      <button class="editar">✏️ Editar</button>
-      <button class="eliminar">🗑️ Eliminar</button>
-    `;
+  lista.innerHTML = `
+    <table border="1" cellpadding="5">
+      <tr>
+        <th>Código</th>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Acciones</th>
+      </tr>
+      ${productos
+        .map(
+          (p) => `
+        <tr>
+          <td>${p.codigo}</td>
+          <td>${p.nombre}</td>
+          <td>${p.precio}</td>
+          <td>${p.stock}</td>
+          <td>
+            <button onclick="editarProducto(${p.id})">✏️</button>
+            <button onclick="eliminarProducto(${p.id})">🗑️</button>
+          </td>
+        </tr>
+      `
+        )
+        .join("")}
+    </table>
+  `;
 
-    // Editar
-    div.querySelector(".editar").addEventListener("click", async () => {
-      const nuevoNombre = prompt("Nuevo nombre:", p.nombre);
-      const nuevoPrecio = prompt("Nuevo precio:", p.precio);
-      const nuevoStock = prompt("Nuevo stock:", p.stock);
+  // Globales
+  window.editarProducto = async (id) => {
+    const producto = productos.find((p) => p.id === id);
+    if (producto) {
+      await updateProducto(id, producto);
+      const productosActualizados = await getProductos();
+      renderProductosUI(productosActualizados);
+    }
+  };
 
-      if (nuevoNombre && nuevoPrecio && nuevoStock) {
-        await updateProducto(p.id, {
-          nombre: nuevoNombre,
-          precio: parseFloat(nuevoPrecio),
-          stock: parseInt(nuevoStock),
-        });
-        renderProductos();
-      }
-    });
-
-    // Eliminar con confirmación
-    div.querySelector(".eliminar").addEventListener("click", async () => {
-      const confirmar = await showConfirm("¿Seguro que deseas eliminar este producto?");
-      if (confirmar) {
-        await deleteProducto(p.id);
-        renderProductos();
-      }
-    });
-
-    container.appendChild(div);
-  });
+  window.eliminarProducto = async (id) => {
+    await deleteProducto(id);
+    const productosActualizados = await getProductos();
+    renderProductosUI(productosActualizados);
+  };
 }

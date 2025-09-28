@@ -33,6 +33,8 @@ function authenticateToken(req, res, next) {
 app.use("/api/productos", productRouter);
 app.use("/api/ventas", ventaRouter);
 app.use("/api/ventas", saleRouter);
+app.use("/api/productos", productRouter);
+
 
 
 // Endpoint para obtener el token (solo para pruebas)
