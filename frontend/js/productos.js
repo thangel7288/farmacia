@@ -1,79 +1,47 @@
-import { showSuccess, showError, showConfirm, showEditForm } from "./utils/alerts.js";
+// frontend/js/productos.js
 
-export async function addProducto(data) {
+import { showSuccess, showError } from "./utils/alerts.js";
+
+// Se asegura de importar TODAS las funciones necesarias desde api.js
+import { getProductosApi, createProductoApi, updateProductoApi, deleteProductoApi } from '../api.js';
+// ✅ La palabra 'export' es la clave
+export async function addProduct(data) {
   try {
-    const res = await fetch("http://localhost:3000/api/productos", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer mi-token-supersecreto",
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!res.ok) throw new Error("Error al crear producto");
-
+    await createProductoApi(data);
     showSuccess("✅ Producto agregado correctamente");
+    return true; // <-- Clave: Devuelve 'true' si todo salió bien
   } catch (err) {
     showError(err.message);
+    return false; // <-- Clave: Devuelve 'false' si hubo un error
   }
 }
 
-export async function updateProducto(id, productoActual) {
+// ✅ La palabra 'export' es la clave
+export async function updateProducto(id, data) {
   try {
-    const data = await showEditForm(productoActual);
-    if (!data) return; // canceló
-
-    const res = await fetch(`http://localhost:3000/api/productos/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer mi-token-supersecreto",
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!res.ok) throw new Error("Error al actualizar producto");
-
+    await updateProductoApi(id, data);
     showSuccess("✏️ Producto actualizado correctamente");
   } catch (err) {
     showError(err.message);
   }
 }
 
+// ✅ La palabra 'export' es la clave
 export async function deleteProducto(id) {
   try {
-    const confirm = await showConfirm("Este producto será eliminado permanentemente");
-    if (!confirm) return;
-
-    const res = await fetch(`http://localhost:3000/api/productos/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Authorization": "Bearer mi-token-supersecreto",
-      },
-    });
-
-    if (!res.ok) throw new Error("Error al eliminar producto");
-
+    await deleteProductoApi(id);
     showSuccess("🗑️ Producto eliminado correctamente");
   } catch (err) {
     showError(err.message);
   }
 }
 
+// ✅ La palabra 'export' es la clave
 export async function getProductos() {
   try {
-    const res = await fetch("http://localhost:3000/api/productos", {
-      headers: {
-        "Authorization": "Bearer mi-token-supersecreto",
-      },
-    });
-
-    if (!res.ok) throw new Error("Error al obtener productos");
-
-    return await res.json();
+    return await getProductosApi();
   } catch (err) {
     showError(err.message);
-    return [];
+    return []; 
   }
 }
