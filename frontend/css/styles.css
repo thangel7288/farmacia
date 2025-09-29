@@ -1,61 +1,279 @@
+/* --- Estilos Generales y Tipografía --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+:root {
+  --primary-color: #007bff;
+  --primary-hover: #0056b3;
+  --success-color: #28a745;
+  --success-hover: #218838;
+  --danger-color: #dc3545;
+  --danger-hover: #c82333;
+  --light-gray: #f8f9fa;
+  --gray: #dee2e6;
+  --dark-gray: #6c757d;
+  --text-color: #212529;
+  --background-color: #e9ecef;
+  --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
-  background: #f5f5f5;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-h1 {
-  color: #333;
-  margin-bottom: 15px;
+#app {
+  width: 100%;
+  max-width: 1200px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden; /* Para que los bordes redondeados se apliquen bien */
 }
 
+h2 {
+  color: var(--text-color);
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--light-gray);
+  margin-top: 0;
+}
+
+/* --- Menú de Navegación --- */
+.menu {
+  display: flex;
+  background-color: var(--light-gray);
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--gray);
+}
+
+.menu button {
+  background: none;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--dark-gray);
+  border-radius: 6px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.menu button:hover {
+  background-color: var(--gray);
+  color: var(--text-color);
+}
+
+#vista {
+  padding: 25px;
+}
+
+/* --- Formularios --- */
 form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+form input[type="text"],
+form input[type="number"] {
+  padding: 10px;
+  border: 1px solid var(--gray);
+  border-radius: 6px;
+  font-size: 14px;
+  flex: 1; /* Hace que los inputs se expandan */
+}
+
+form button[type="submit"], .btn-primary {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--success-color);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+form button[type="submit"]:hover, .btn-primary:hover {
+  background-color: var(--success-hover);
+}
+
+/* --- Tablas --- */
+.tabla-productos {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.tabla-productos th, .tabla-productos td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid var(--gray);
+}
+
+.tabla-productos thead th {
+  background-color: var(--light-gray);
+  font-weight: 600;
+}
+
+.tabla-productos tbody tr:nth-child(even) {
+  background-color: var(--light-gray);
+}
+
+.tabla-productos tbody tr:hover {
+  background-color: #e2e6ea;
+}
+
+.tabla-productos button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px;
+}
+
+/* --- Vista de Ventas --- */
+.vista-ventas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.panel-busqueda, .panel-carrito {
+  padding: 20px;
+  border: 1px solid var(--gray);
+  border-radius: 8px;
+}
+
+#input-busqueda {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.lista-resultados li {
+  list-style: none;
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.lista-resultados li:hover {
+  background-color: var(--light-gray);
+}
+
+.lista-carrito li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  list-style: none;
+}
+
+.carrito-controles {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-cantidad {
+  border: 1px solid var(--gray);
+  background: white;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.carrito-total {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 2px solid var(--text-color);
+  text-align: right;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+#btn-finalizar-venta {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  font-size: 16px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#btn-finalizar-venta:hover {
+  background-color: var(--primary-hover);
+}
+
+#btn-finalizar-venta:disabled {
+  background-color: var(--dark-gray);
+  cursor: not-allowed;
+}
+
+/* --- Historial de Ventas --- */
+.historial-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
-form input, form button {
-  margin-right: 10px;
-  padding: 8px;
-  border: 1px solid #aaa;
-  border-radius: 4px;
+.total-mes-card {
+  background: var(--light-gray);
+  padding: 15px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--gray);
+  text-align: right;
+}
+.total-mes-card strong {
+  display: block;
+  color: var(--dark-gray);
+}
+.total-mes-card span {
+  font-size: 1.5em;
+  font-weight: 600;
+  color: var(--success-color);
 }
 
-form button {
-  background: #4CAF50;
-  color: white;
-  cursor: pointer;
-  border: none;
-}
-
-form button:hover {
-  background: #45a049;
-}
-
-#productos-lista table {
-  width: 100%;
-  border-collapse: collapse;
+.venta-card {
   background: white;
+  border: 1px solid var(--gray);
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-#productos-lista th, 
-#productos-lista td {
-  padding: 10px;
-  border: 1px solid #ddd;
-  text-align: center;
+.venta-card-header, .venta-card-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  background-color: var(--light-gray);
 }
 
-#productos-lista th {
-  background: #f0f0f0;
+.venta-card-body {
+  padding: 15px;
+  list-style: none;
+  margin: 0;
 }
-
-#productos-lista button {
-  border: none;
-  cursor: pointer;
-  padding: 6px;
-  margin: 2px;
-  border-radius: 3px;
-}
-
-#productos-lista button:hover {
-  opacity: 0.8;
+.venta-card-body li {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
 }
