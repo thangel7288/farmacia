@@ -6,7 +6,9 @@
   "scripts": {
     "backend": "nodemon backend/server.js",
     "electron": "electron .",
-    "dev": "concurrently \"npm run backend\" \"npm run electron\""
+    "dev": "concurrently \"npm run backend\" \"npm run electron\"",
+    "build": "electron-builder"
+
   },
   "keywords": [
     "electron",
@@ -31,6 +33,26 @@
   "devDependencies": {
     "concurrently": "^8.2.2",
     "electron": "^31.7.7",
+    "electron-builder": "^26.0.12",
     "nodemon": "^3.1.10"
+  },
+  "build": {
+    "appId": "com.farmacia.sistemainventario",
+    "productName": "Sistema Farmacia",
+    "files": [
+      "**/*",
+      "!node_modules/electron-builder/**/*"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }
