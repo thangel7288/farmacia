@@ -118,8 +118,7 @@ dist
 
 # Electron build output
 dist/
-build/
-!build/icons/  # Mantener la carpeta de íconos
+
 
 # Base de datos SQLite (opcional - si no quieres subir datos de prueba)
 *.db
