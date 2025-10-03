@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "description": "Sistema de inventario y ventas para farmacia con Node.js, Express, SQLite y Electron",
   "main": "main.js",
-  "scripts": {
-    "backend": "nodemon backend/server.js",
-    "electron": "electron .",
-    "dev": "concurrently \"npm run backend\" \"npm run electron\"",
-    "build": "electron-builder"
-  },
+ "scripts": {
+  "start": "electron .",
+  "dev": "electron .",
+  "build": "electron-builder"
+},
   "keywords": [
     "electron",
     "nodejs",

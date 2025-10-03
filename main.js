@@ -1,35 +1,52 @@
+// main.js
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
+const { spawn } = require("child_process");
+
+let mainWindow;
+let backendProcess;
 
 function createWindow() {
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+  mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false, // para que funcione tu JS en renderer
+      nodeIntegration: true,   // necesario para JS plano
+      contextIsolation: false, // habilita require en frontend si lo usas
     },
   });
 
-  // Cargar el index.html desde la carpeta frontend
-  win.loadFile(path.join(__dirname, "frontend", "index.html"));
+  // 👉 Cargar el index.html desde la carpeta frontend
+  mainWindow.loadFile(path.join(__dirname, "frontend", "index.html"));
 
-  // Abre las herramientas de desarrollo (opcional)
-  // win.webContents.openDevTools();
-}
-
-app.whenReady().then(() => {
-  createWindow();
-
-  app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
+  mainWindow.on("closed", () => {
+    mainWindow = null;
+    if (backendProcess) {
+      backendProcess.kill(); // cierra el backend al salir
     }
   });
+}
+
+app.on("ready", () => {
+  // 🚀 Iniciar backend automáticamente
+  const serverPath = path.join(__dirname, "backend", "server.js");
+
+  backendProcess = spawn("node", [serverPath], {
+    stdio: "inherit", // muestra logs en la terminal
+    shell: true,
+  });
+
+  createWindow();
 });
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
+  }
+});
+
+app.on("activate", () => {
+  if (mainWindow === null) {
+    createWindow();
   }
 });
