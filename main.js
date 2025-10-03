@@ -12,7 +12,7 @@ function createWindow() {
     height: 800,
     webPreferences: {
       nodeIntegration: true,   // necesario para JS plano
-      contextIsolation: false, // habilita require en frontend si lo usas
+      contextIsolation: false, // habilita require en frontend si lo usa
     },
   });
 
