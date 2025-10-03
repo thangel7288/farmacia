@@ -2,17 +2,16 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const path = require("path");
 
 // Routers
 const productRouter = require("./routes/productRouter");
 const ventaRouter = require("./routes/ventaRouter");
-const saleRouter = require("./routes/saleRouter");
+// Tienes dos routers para ventas, usaré solo uno. Asegúrate de que sea el correcto.
+// const saleRouter = require("./routes/saleRouter"); 
 
 const app = express();
-const PORT = 3000;
 
-// 🔑 Token fijo (local)
+// Token fijo (local)
 const FIXED_TOKEN = "mi-token-supersecreto";
 
 app.use(cors());
@@ -29,25 +28,13 @@ function authenticateToken(req, res, next) {
   next();
 }
 
-// ✅ Rutas API (protegidas)
+// Rutas API (protegidas)
 app.use("/api/productos", authenticateToken, productRouter);
 app.use("/api/ventas", authenticateToken, ventaRouter);
-app.use("/api/ventas", authenticateToken, saleRouter);
+// app.use("/api/ventas", authenticateToken, saleRouter); // Esta línea es redundante
 
-// Endpoint para obtener el token (solo pruebas)
-app.get("/api/token", (req, res) => {
-  res.json({ token: FIXED_TOKEN });
-});
+// Hemos quitado las líneas `app.use(express.static(...))` y `app.get("*", ...)`
+// porque Electron ya se encarga de mostrar tu frontend con el comando `mainWindow.loadFile()`.
 
-// Servir el frontend (HTML, CSS, JS) de la carpeta frontend
-app.use(express.static(path.join(__dirname, "../frontend")));
-
-// Si alguien entra a "/" → carga el index.html
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend", "index.html"));
-});
-
-// Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`✅ Servidor local corriendo en http://localhost:${PORT}`);
-});
+// 👇 CAMBIO CLAVE: Exportamos la app en lugar de iniciarla aquí.
+module.exports = app;

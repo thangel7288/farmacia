@@ -1,16 +1,26 @@
 // backend/config/db.js
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
+// 1. Importamos 'app' desde Electron para acceder a rutas del sistema
+const { app } = require("electron");
 
-// Ruta absoluta a farmacia.db en la raíz del proyecto
-const dbPath = path.resolve(__dirname, "../../farmacia.db");
+// 2. Obtenemos la ruta segura para guardar datos de la aplicación
+// Esto será una carpeta como: C:\Users\TuUsuario\AppData\Roaming\farmacia-app
+const userDataPath = app.getPath("userData");
 
-// Conexión a SQLite
+// 3. Creamos la ruta completa al archivo de la base de datos
+// El archivo 'farmacia.db' ahora vivirá dentro de esa carpeta segura.
+const dbPath = path.join(userDataPath, "farmacia.db");
+
+console.log("Ruta de la base de datos:", dbPath); // Muy útil para saber dónde se guarda
+
+// Conexión a SQLite (el resto del código es igual)
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
-    console.error("❌ Error al conectar con SQLite:", err.message);
+    // Si hay un error aquí, la aplicación instalada no funcionará
+    console.error("❌ Error CRÍTICO al conectar con SQLite:", err.message);
   } else {
-    console.log("✅ Conectado a la base de datos SQLite:", dbPath);
+    console.log("✅ Conectado a la base de datos SQLite en:", dbPath);
   }
 });
 
@@ -59,8 +69,9 @@ db.serialize(() => {
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `);
-    db.run(`CREATE INDEX IF NOT EXISTS idx_ventas_fecha ON ventas(fecha)`);
-
+  
+  // Índice para que las búsquedas por fecha sean rápidas
+  db.run(`CREATE INDEX IF NOT EXISTS idx_ventas_fecha ON ventas(fecha)`);
 });
 
 module.exports = db;
